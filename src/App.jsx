@@ -22,6 +22,7 @@ function App() {
     <div className={application}>
       <CssBaseline />
       <Player />
+      Na brode merlina
       <Playlist />
     </div>
   );
