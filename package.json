@@ -7,10 +7,12 @@
     "@material-ui/icons": "^4.5.1",
     "@material-ui/styles": "^4.6.0",
     "axios": "^0.19.0",
+    "pitch-analyser": "^1.0.0",
     "react": "^16.11.0",
     "react-dom": "^16.11.0",
     "react-redux": "^7.1.3",
     "react-scripts": "3.2.0",
+    "react-speech-kit": "^2.0.2",
     "redux": "^4.0.4",
     "redux-thunk": "^2.3.0"
   },
