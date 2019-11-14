@@ -1,4 +1,4 @@
-import React, { useReducer, useEffect } from "react";
+import React, { useReducer } from "react";
 import IconButton from "@material-ui/core/IconButton";
 import { InputLabel } from "@material-ui/core";
 import { useSpeechRecognition } from "react-speech-kit";
