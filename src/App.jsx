@@ -1,18 +1,18 @@
-import React from 'react';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import { makeStyles } from '@material-ui/core/styles';
-
-import Player from './components/Player/Player';
-import Playlist from './components/Playlist/Playlist';
+import React from "react";
+import CssBaseline from "@material-ui/core/CssBaseline";
+import { makeStyles } from "@material-ui/core/styles";
+import Player from "./components/Player/Player";
+import Playlist from "./components/Playlist/Playlist";
+import AudioInputListener from "./components/AudioInputListener/AudioInputListener";
 
 const useStyles = makeStyles({
   application: {
-    width: '100vw',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-around',
-    height: '100vh',
-  },
+    width: "100vw",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-around",
+    height: "100vh"
+  }
 });
 
 function App() {
@@ -22,6 +22,7 @@ function App() {
     <div className={application}>
       <CssBaseline />
       <Player />
+      <AudioInputListener />
       <Playlist />
     </div>
   );
