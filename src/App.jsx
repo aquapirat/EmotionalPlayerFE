@@ -4,6 +4,10 @@ import { makeStyles } from "@material-ui/core/styles";
 import Player from "./components/Player/Player";
 import Playlist from "./components/Playlist/Playlist";
 import AudioInputListener from "./components/AudioInputListener/AudioInputListener";
+import test from "./test.mp3";
+import { Howl } from "howler";
+import { addSound } from "./actions/addSound";
+import { connect } from "react-redux";
 
 const useStyles = makeStyles({
   application: {
@@ -15,17 +19,26 @@ const useStyles = makeStyles({
   }
 });
 
-function App() {
+function App({ addSound }) {
   const { application } = useStyles();
-
+  const sound = new Howl({
+    src: test
+  });
+  addSound(sound);
   return (
     <div className={application}>
       <CssBaseline />
-      <Player />
-      <AudioInputListener />
+      <Player sound={sound} />
+      <AudioInputListener sound={sound} />
       <Playlist />
     </div>
   );
 }
 
-export default App;
+const mapDispatchToProps = dispatch => {
+  return {
+    addSound: sound => dispatch(addSound(sound))
+  };
+};
+
+export default connect(null, mapDispatchToProps)(App);

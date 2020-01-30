@@ -1,15 +1,9 @@
-import React, { useReducer } from "react";
+import React from "react";
 import IconButton from "@material-ui/core/IconButton";
-import { InputLabel } from "@material-ui/core";
 import { useSpeechRecognition } from "react-speech-kit";
-import {
-  START_PLAYING,
-  STOP_PLAYING,
-  NEXT_TRACK,
-  PREVIOUS_TRACK,
-  PLAY_TRACK,
-  MATCH_PLAYLIST_TO_USER_MOOD
-} from "../../constants/voiceCommands";
+import { connect } from "react-redux";
+import { setIsPlaying } from "../../actions/setIsPlaying";
+import { unsetIsPlaying } from "../../actions/unsetIsPlaying";
 
 const START_RECORDING_ICON_SVG_DIRECTIONS =
   "M9 15c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4zm7.76-9.64l-1.68 1.69c.84 1.18.84 2.71 0 3.89l1.68 1.69c2.02-2.02 2.02-5.07 0-7.27zM20.07 2l-1.63 1.63c2.77 3.02 2.77 7.56 0 10.74L20.07 16c3.9-3.89 3.91-9.95 0-14z";
@@ -30,48 +24,43 @@ const drawSvgIcon = svgPathDirections => {
   );
 };
 
-const initialState = { voiceCommand: "", voiceFrequency: [] };
-
-const voiceCommandsReducer = (state, action) => {
-  switch (action.voiceCommand) {
-    case START_PLAYING:
-      console.log("start playing");
-      //todo: send post to backend with command
-      return { ...state, voiceCommand: action.voiceCommand };
-    case STOP_PLAYING:
-      console.log("stop playing");
-      //todo: send post to backend with command
-      return { ...state, voiceCommand: action.voiceCommand };
-    case NEXT_TRACK:
-      console.log("next track");
-      //todo: send post to backend with command
-      return { ...state, voiceCommand: action.voiceCommand };
-    case PREVIOUS_TRACK:
-      console.log("previous track");
-      //todo: send post to backend with command
-      return { ...state, voiceCommand: action.voiceCommand };
-    case PLAY_TRACK:
-      console.log("playing track number: ", state);
-      //todo: send post to backend with command
-      return { ...state, voiceCommand: action.voiceCommand };
-    case MATCH_PLAYLIST_TO_USER_MOOD:
-      console.log("matching track with user's mood");
-      //todo: post voice frequency to backend
-      return {
-        ...state,
-        voiceCommand: action.voiceCommand,
-        voiceFrequency: action.voiceFrequency
-      };
-    default:
-      return { ...state, voiceCommand: action.voiceCommand };
+const handlePlay = (sound, isPlaying) => {
+  console.log("im in function play");
+  if (!isPlaying) {
+    sound.stop();
+    sound.play();
   }
 };
 
-const AudioInputListener = () => {
-  const [state, dispatch] = useReducer(voiceCommandsReducer, initialState);
+const handleStop = (sound, isPlaying) => {
+  console.log("im in function stop", isPlaying);
+  if (isPlaying) {
+    sound.pause();
+  }
+};
+
+const AudioInputListener = ({
+  sound,
+  isPlaying,
+  setIsPlaying,
+  unsetIsPlaying
+}) => {
+  console.log("THIS IS PLAYING STATUS", isPlaying);
   const { listen, listening, stop } = useSpeechRecognition({
     onResult: result => {
-      dispatch({ voiceCommand: result.toLowerCase(), voiceFrequency: [] });
+      console.log(result);
+      switch (result) {
+        case "start":
+          handlePlay(sound, isPlaying);
+          setIsPlaying();
+          break;
+        case "stop":
+          handleStop(sound, isPlaying);
+          unsetIsPlaying();
+          break;
+        default:
+          console.log("not recognition");
+      }
     }
   });
 
@@ -82,9 +71,23 @@ const AudioInputListener = () => {
           ? drawSvgIcon(STOP_RECORDING_ICON_SVG_DIRECTIONS)
           : drawSvgIcon(START_RECORDING_ICON_SVG_DIRECTIONS)}
       </IconButton>
-      <InputLabel>{state.voiceCommand}</InputLabel>
+      {/* <InputLabel>{state.voiceCommand}</InputLabel> */}
     </>
   );
 };
 
-export default AudioInputListener;
+const mapStateToProps = state => {
+  return {
+    sound: state.sound.sound,
+    isPlaying: state.sound.isPlaying
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    setIsPlaying: () => dispatch(setIsPlaying()),
+    unsetIsPlaying: () => dispatch(unsetIsPlaying())
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(AudioInputListener);
