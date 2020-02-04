@@ -1,9 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import IconButton from "@material-ui/core/IconButton";
 import { useSpeechRecognition } from "react-speech-kit";
 import { connect } from "react-redux";
-import { setIsPlaying } from "../../actions/setIsPlaying";
-import { unsetIsPlaying } from "../../actions/unsetIsPlaying";
 
 const START_RECORDING_ICON_SVG_DIRECTIONS =
   "M9 15c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4zm7.76-9.64l-1.68 1.69c.84 1.18.84 2.71 0 3.89l1.68 1.69c2.02-2.02 2.02-5.07 0-7.27zM20.07 2l-1.63 1.63c2.77 3.02 2.77 7.56 0 10.74L20.07 16c3.9-3.89 3.91-9.95 0-14z";
@@ -24,39 +22,35 @@ const drawSvgIcon = svgPathDirections => {
   );
 };
 
-const handlePlay = (sound, isPlaying) => {
+const handlePlay = sound => {
   console.log("im in function play");
-  if (!isPlaying) {
-    sound.stop();
-    sound.play();
-  }
+  sound.stop();
+  sound.play();
 };
 
-const handleStop = (sound, isPlaying) => {
-  console.log("im in function stop", isPlaying);
-  if (isPlaying) {
-    sound.pause();
-  }
+const handleStop = sound => {
+  console.log("im in function stop");
+  sound.pause();
 };
 
-const AudioInputListener = ({
-  sound,
-  isPlaying,
-  setIsPlaying,
-  unsetIsPlaying
-}) => {
+const AudioInputListener = ({ sound }) => {
+  const [isPlaying, setIsPlaying] = useState(false);
   console.log("THIS IS PLAYING STATUS", isPlaying);
   const { listen, listening, stop } = useSpeechRecognition({
     onResult: result => {
       console.log(result);
       switch (result) {
         case "start":
-          handlePlay(sound, isPlaying);
-          setIsPlaying();
+          if (!isPlaying) {
+            handlePlay(sound);
+            setIsPlaying(true);
+          }
           break;
         case "stop":
-          handleStop(sound, isPlaying);
-          unsetIsPlaying();
+          if (isPlaying) {
+            handleStop(sound, isPlaying);
+            setIsPlaying(false);
+          }
           break;
         default:
           console.log("not recognition");
@@ -78,16 +72,8 @@ const AudioInputListener = ({
 
 const mapStateToProps = state => {
   return {
-    sound: state.sound.sound,
-    isPlaying: state.sound.isPlaying
+    sound: state.sound.sound
   };
 };
 
-const mapDispatchToProps = dispatch => {
-  return {
-    setIsPlaying: () => dispatch(setIsPlaying()),
-    unsetIsPlaying: () => dispatch(unsetIsPlaying())
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(AudioInputListener);
+export default connect(mapStateToProps)(AudioInputListener);
