@@ -4,8 +4,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Player from "./components/Player/Player";
 import Playlist from "./components/Playlist/Playlist";
 import AudioInputListener from "./components/AudioInputListener/AudioInputListener";
-import test from "./test.mp3";
-import { Howl } from "howler";
+import sound1 from "./test.mp3";
 import { addSound } from "./actions/addSound";
 import { connect } from "react-redux";
 import sound2 from "./iseefire.mp3";
@@ -21,12 +20,12 @@ const useStyles = makeStyles({
   }
 });
 
-function App({ addSound, playing }) {
+function App({ playing, index }) {
   const { application } = useStyles();
-  // addSound(sound);
+  const playlist = [sound1, sound2];
   return (
     <div className={application}>
-      <ReactHowler src={[test]} playing={playing} />
+      <ReactHowler src={playlist[index]} playing={playing} />
       <CssBaseline />
       <Player />
       <AudioInputListener />
@@ -37,7 +36,8 @@ function App({ addSound, playing }) {
 
 const mapStateToProps = state => {
   return {
-    playing: state.sound.playing
+    playing: state.sound.playing,
+    index: state.sound.index
   };
 };
 
