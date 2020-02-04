@@ -10,7 +10,6 @@ import { addSound } from "./actions/addSound";
 import { connect } from "react-redux";
 import sound2 from "./iseefire.mp3";
 import ReactHowler from "react-howler";
-import { togglePlaying } from "./actions/togglePlaying";
 
 const useStyles = makeStyles({
   application: {
@@ -22,24 +21,15 @@ const useStyles = makeStyles({
   }
 });
 
-function App({ addSound, playing, togglePlaying }) {
-  const handlePlay = () => {
-    togglePlaying();
-    console.log("xd");
-  };
+function App({ addSound, playing }) {
   const { application } = useStyles();
-  const sound = new Howl({
-    src: [test, sound2]
-  });
-  addSound(sound);
-  console.log("playing: ", playing);
+  // addSound(sound);
   return (
     <div className={application}>
       <ReactHowler src={[test]} playing={playing} />
-      <button onClick={handlePlay}>start/stop</button>
       <CssBaseline />
-      <Player sound={sound} />
-      <AudioInputListener sound={sound} />
+      <Player />
+      <AudioInputListener />
       <Playlist />
     </div>
   );
@@ -53,8 +43,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    addSound: sound => dispatch(addSound(sound)),
-    togglePlaying: () => dispatch(togglePlaying())
+    addSound: sound => dispatch(addSound(sound))
   };
 };
 

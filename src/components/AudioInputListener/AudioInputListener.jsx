@@ -24,18 +24,7 @@ const drawSvgIcon = svgPathDirections => {
   );
 };
 
-const handlePlay = (sound, index) => {
-  console.log("im in function play");
-  sound.stop();
-  sound.play();
-};
-
-const handleStop = (sound, index) => {
-  console.log("im in function stop");
-  sound.pause();
-};
-
-const AudioInputListener = ({ sound, play, stopMusic }) => {
+const AudioInputListener = ({ play, stopMusic }) => {
   const { listen, listening, stop } = useSpeechRecognition({
     onResult: result => {
       console.log(result);
@@ -64,12 +53,6 @@ const AudioInputListener = ({ sound, play, stopMusic }) => {
   );
 };
 
-const mapStateToProps = state => {
-  return {
-    sound: state.sound.sound
-  };
-};
-
 const mapDispatchToProps = dispatch => {
   return {
     play: () => dispatch(play()),
@@ -77,4 +60,4 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(AudioInputListener);
+export default connect(null, mapDispatchToProps)(AudioInputListener);
