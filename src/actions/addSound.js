@@ -1,8 +1,8 @@
-export const addSound = sound => {
+export const addSound = playlist => {
   return {
     type: "ADD_SOUND",
     data: {
-      sound: sound
+      playlist
     }
   };
 };

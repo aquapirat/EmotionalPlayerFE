@@ -8,6 +8,9 @@ import test from "./test.mp3";
 import { Howl } from "howler";
 import { addSound } from "./actions/addSound";
 import { connect } from "react-redux";
+import sound2 from "./iseefire.mp3";
+import ReactHowler from "react-howler";
+import { togglePlaying } from "./actions/togglePlaying";
 
 const useStyles = makeStyles({
   application: {
@@ -19,14 +22,21 @@ const useStyles = makeStyles({
   }
 });
 
-function App({ addSound }) {
+function App({ addSound, playing, togglePlaying }) {
+  const handlePlay = () => {
+    togglePlaying();
+    console.log("xd");
+  };
   const { application } = useStyles();
   const sound = new Howl({
-    src: test
+    src: [test, sound2]
   });
   addSound(sound);
+  console.log("playing: ", playing);
   return (
     <div className={application}>
+      <ReactHowler src={[test]} playing={playing} />
+      <button onClick={handlePlay}>start/stop</button>
       <CssBaseline />
       <Player sound={sound} />
       <AudioInputListener sound={sound} />
@@ -35,10 +45,17 @@ function App({ addSound }) {
   );
 }
 
-const mapDispatchToProps = dispatch => {
+const mapStateToProps = state => {
   return {
-    addSound: sound => dispatch(addSound(sound))
+    playing: state.sound.playing
   };
 };
 
-export default connect(null, mapDispatchToProps)(App);
+const mapDispatchToProps = dispatch => {
+  return {
+    addSound: sound => dispatch(addSound(sound)),
+    togglePlaying: () => dispatch(togglePlaying())
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
