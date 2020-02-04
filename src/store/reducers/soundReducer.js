@@ -13,6 +13,8 @@ const soundReducer = (state = initialState, action) => {
       return { ...state, playing: false };
     case "NEXT":
       return { ...state, index: 1 };
+    case "PREVIOUS":
+      return { ...state, index: 0 };
     default:
       return state;
   }
