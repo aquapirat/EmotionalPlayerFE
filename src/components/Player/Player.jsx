@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
 import CardMedia from "@material-ui/core/CardMedia";
@@ -12,9 +12,15 @@ import { makeStyles } from "@material-ui/core/styles";
 
 import SkipPreviousIcon from "@material-ui/icons/SkipPrevious";
 import SkipNextIcon from "@material-ui/icons/SkipNext";
+import StopIcon from "@material-ui/icons/Stop";
 import PlayArrowIcon from "@material-ui/icons/PlayArrow";
 
 import imageMock from "../../mocks/albumImage.jpeg";
+import { play } from "../../actions/play";
+import { stopMusic } from "../../actions/stopMusic";
+import { next } from "../../actions/next";
+import { previous } from "../../actions/previous";
+import { connect } from "react-redux";
 
 const useStyles = makeStyles(theme => ({
   player: {
@@ -39,7 +45,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const Player = props => {
+const Player = ({ play, stopMusic, next, previous, playing, soundFile }) => {
   const {
     player,
     cover,
@@ -48,18 +54,23 @@ const Player = props => {
     timeSliderCotainer
   } = useStyles();
 
-  const [isPlaying, setIsPlaying] = useState(false);
-
   const handlePlay = () => {
-    if (!isPlaying) {
-      props.sound.play();
-      setIsPlaying(true);
-    } else {
-      props.sound.pause();
-      setIsPlaying(false);
-    }
+    play();
   };
 
+  const handleStop = () => {
+    stopMusic();
+  };
+
+  const handleNext = () => {
+    next();
+  };
+
+  const handlePrevious = () => {
+    previous();
+  };
+
+  console.log(soundFile);
   return (
     <Card className={player}>
       <CardHeader subheader="6Lack" title="Free" />
@@ -77,13 +88,17 @@ const Player = props => {
           </Grid>
         </Grid>
         <IconButton>
-          <SkipPreviousIcon />
+          <SkipPreviousIcon onClick={handlePrevious} />
         </IconButton>
         <IconButton>
-          <PlayArrowIcon onClick={handlePlay} />
+          {!playing ? (
+            <PlayArrowIcon onClick={handlePlay} />
+          ) : (
+            <StopIcon onClick={handleStop} />
+          )}
         </IconButton>
         <IconButton>
-          <SkipNextIcon />
+          <SkipNextIcon onClick={handleNext} />
         </IconButton>
       </CardActions>
       <div className={timeSliderCotainer}>
@@ -97,4 +112,20 @@ const Player = props => {
   );
 };
 
-export default Player;
+const mapStateToProps = state => {
+  return {
+    playing: state.sound.playing,
+    soundFile: state.sound.sound
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    play: () => dispatch(play()),
+    stopMusic: () => dispatch(stopMusic()),
+    next: () => dispatch(next()),
+    previous: () => dispatch(previous())
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Player);
