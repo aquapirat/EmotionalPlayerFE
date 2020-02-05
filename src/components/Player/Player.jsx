@@ -45,7 +45,16 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const Player = ({ play, stopMusic, next, previous, playing, soundFile }) => {
+const Player = ({
+  play,
+  stopMusic,
+  next,
+  previous,
+  playing,
+  playlist,
+  index,
+  referenceToFile
+}) => {
   const {
     player,
     cover,
@@ -69,8 +78,8 @@ const Player = ({ play, stopMusic, next, previous, playing, soundFile }) => {
   const handlePrevious = () => {
     previous();
   };
-
-  console.log(soundFile);
+  const currentSoundFile = playlist[index];
+  console.log("test", referenceToFile);
   return (
     <Card className={player}>
       <CardHeader subheader="6Lack" title="Free" />
@@ -102,11 +111,24 @@ const Player = ({ play, stopMusic, next, previous, playing, soundFile }) => {
         </IconButton>
       </CardActions>
       <div className={timeSliderCotainer}>
-        <span>0:00</span>
+        <span>
+          {referenceToFile !== undefined
+            ? referenceToFile.seek().toFixed(2)
+            : "0:00"}
+        </span>
         <div className={timeSlider}>
           <Slider />
         </div>
-        <span>3:10</span>
+        <span>
+          {console.log(
+            referenceToFile !== undefined
+              ? referenceToFile.duration()
+              : "niezdefiniowane"
+          )}
+          {referenceToFile !== undefined
+            ? referenceToFile.duration().toFixed(2)
+            : "0:00"}
+        </span>
       </div>
     </Card>
   );
@@ -115,7 +137,9 @@ const Player = ({ play, stopMusic, next, previous, playing, soundFile }) => {
 const mapStateToProps = state => {
   return {
     playing: state.sound.playing,
-    soundFile: state.sound.sound
+    playlist: state.sound.playlist,
+    index: state.sound.index,
+    referenceToFile: state.sound.referenceToFile
   };
 };
 

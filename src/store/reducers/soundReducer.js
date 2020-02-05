@@ -1,12 +1,16 @@
 const initialState = {
   playing: false,
-  index: 0
+  index: 0,
+  playlist: [],
+  referenceToFile: undefined
 };
 
 const soundReducer = (state = initialState, action) => {
   switch (action.type) {
-    case "ADD_SOUND":
-      return { ...state, sound: action.data.sound };
+    case "ADD_PLAYLIST":
+      return { ...state, playlist: action.playlist };
+    case "ADD_REF":
+      return { ...state, referenceToFile: action.referenceToFile };
     case "PLAY":
       return { ...state, playing: true };
     case "STOP":

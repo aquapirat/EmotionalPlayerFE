@@ -5,10 +5,11 @@ import Player from "./components/Player/Player";
 import Playlist from "./components/Playlist/Playlist";
 import AudioInputListener from "./components/AudioInputListener/AudioInputListener";
 import sound1 from "./test.mp3";
-import { addSound } from "./actions/addSound";
+import { addPlaylist } from "./actions/addPlaylist";
 import { connect } from "react-redux";
 import sound2 from "./iseefire.mp3";
 import ReactHowler from "react-howler";
+import { addRef } from "./actions/addRef";
 
 const useStyles = makeStyles({
   application: {
@@ -20,12 +21,19 @@ const useStyles = makeStyles({
   }
 });
 
-function App({ playing, index }) {
+function App({ playing, index, addPlaylist, addRef }) {
   const { application } = useStyles();
   const playlist = [sound1, sound2];
+  addPlaylist(playlist);
   return (
     <div className={application}>
-      <ReactHowler src={playlist[index]} playing={playing} />
+      <ReactHowler
+        src={playlist[index]}
+        playing={playing}
+        ref={ref => addRef(ref)}
+      />
+      {/* {console.log(audio)} */}
+      {/* {console.log("seek: ", audio.seek())} */}
       <CssBaseline />
       <Player />
       <AudioInputListener />
@@ -43,7 +51,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    addSound: sound => dispatch(addSound(sound))
+    addPlaylist: playlist => dispatch(addPlaylist(playlist)),
+    addRef: referenceToFile => dispatch(addRef(referenceToFile))
   };
 };
 
