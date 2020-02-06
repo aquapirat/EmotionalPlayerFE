@@ -21,6 +21,8 @@ import { stopMusic } from "../../actions/stopMusic";
 import { next } from "../../actions/next";
 import { previous } from "../../actions/previous";
 import { connect } from "react-redux";
+import { volumeUp } from "../../actions/volumeUp";
+import { volumeDown } from "../../actions/volumeDown";
 
 const useStyles = makeStyles(theme => ({
   player: {
@@ -51,9 +53,10 @@ const Player = ({
   next,
   previous,
   playing,
-  playlist,
-  index,
-  referenceToFile
+  referenceToFile,
+  volumeUp,
+  volumeDown,
+  volume
 }) => {
   const {
     player,
@@ -79,7 +82,13 @@ const Player = ({
     previous();
   };
 
-  const handleVolumeDown = () => {};
+  const handleVolumeDown = () => {
+    volumeDown();
+  };
+
+  const handleVolumeUp = () => {
+    volumeUp();
+  };
 
   return (
     <Card className={player}>
@@ -88,17 +97,13 @@ const Player = ({
       <CardActions className={audioButtons} disableSpacing>
         <Grid container spacing={1}>
           <Grid item>
-            <VolumeDown
-              onClick={() => {
-                console.log("xd");
-              }}
-            />
+            <VolumeDown onClick={handleVolumeDown} />
           </Grid>
           <Grid item xs>
-            <Slider onChange={null} value={null} />
+            <Slider onChange={null} value={volume} />
           </Grid>
           <Grid item>
-            <VolumeUp />
+            <VolumeUp onClick={handleVolumeUp} />
           </Grid>
         </Grid>
         <IconButton>
@@ -140,7 +145,8 @@ const mapStateToProps = state => {
     playing: state.sound.playing,
     playlist: state.sound.playlist,
     index: state.sound.index,
-    referenceToFile: state.sound.referenceToFile
+    referenceToFile: state.sound.referenceToFile,
+    volume: state.sound.volume
   };
 };
 
@@ -149,7 +155,9 @@ const mapDispatchToProps = dispatch => {
     play: () => dispatch(play()),
     stopMusic: () => dispatch(stopMusic()),
     next: () => dispatch(next()),
-    previous: () => dispatch(previous())
+    previous: () => dispatch(previous()),
+    volumeUp: () => dispatch(volumeUp()),
+    volumeDown: () => dispatch(volumeDown())
   };
 };
 

@@ -2,7 +2,8 @@ const initialState = {
   playing: false,
   index: 0,
   playlist: [],
-  referenceToFile: undefined
+  referenceToFile: undefined,
+  volume: 50
 };
 
 const soundReducer = (state = initialState, action) => {
@@ -28,6 +29,20 @@ const soundReducer = (state = initialState, action) => {
         return { ...state, index: previousIndex };
       } else {
         return { ...state, index: state.playlist.length - 1 };
+      }
+    case "VOLUME_UP":
+      const newVolume = state.volume + 10;
+      if (newVolume <= 100) {
+        return { ...state, volume: newVolume };
+      } else {
+        return state;
+      }
+    case "VOLUME_DOWN":
+      const lowerVolume = state.volume - 100;
+      if (lowerVolume >= 0) {
+        return { ...state, index: lowerVolume };
+      } else {
+        return state;
       }
     default:
       return state;

@@ -21,17 +21,18 @@ const useStyles = makeStyles({
   }
 });
 
-function App({ playing, index, addPlaylist, addRef }) {
+function App({ playing, index, addPlaylist, addRef, volume }) {
   const { application } = useStyles();
   const playlist = [sound1, sound2];
   addPlaylist(playlist);
   return (
     <div className={application}>
+      {console.log(volume)}
       <ReactHowler
         src={playlist[index]}
         playing={playing}
         ref={ref => addRef(ref)}
-        volume={0.3}
+        volume={volume / 100}
       />
       {/* {console.log(audio)} */}
       {/* {console.log("seek: ", audio.seek())} */}
@@ -46,7 +47,8 @@ function App({ playing, index, addPlaylist, addRef }) {
 const mapStateToProps = state => {
   return {
     playing: state.sound.playing,
-    index: state.sound.index
+    index: state.sound.index,
+    volume: state.sound.volume
   };
 };
 
