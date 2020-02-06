@@ -78,8 +78,9 @@ const Player = ({
   const handlePrevious = () => {
     previous();
   };
-  const currentSoundFile = playlist[index];
-  console.log("test", referenceToFile);
+
+  const handleVolumeDown = () => {};
+
   return (
     <Card className={player}>
       <CardHeader subheader="6Lack" title="Free" />
@@ -87,7 +88,11 @@ const Player = ({
       <CardActions className={audioButtons} disableSpacing>
         <Grid container spacing={1}>
           <Grid item>
-            <VolumeDown />
+            <VolumeDown
+              onClick={() => {
+                console.log("xd");
+              }}
+            />
           </Grid>
           <Grid item xs>
             <Slider onChange={null} value={null} />
@@ -112,19 +117,15 @@ const Player = ({
       </CardActions>
       <div className={timeSliderCotainer}>
         <span>
-          {referenceToFile !== undefined
+          {/* {referenceToFile !== undefined
             ? referenceToFile.seek().toFixed(2)
-            : "0:00"}
+            : "0:00"} */}
+          0:00
         </span>
         <div className={timeSlider}>
           <Slider />
         </div>
         <span>
-          {console.log(
-            referenceToFile !== undefined
-              ? referenceToFile.duration()
-              : "niezdefiniowane"
-          )}
           {referenceToFile !== undefined
             ? referenceToFile.duration().toFixed(2)
             : "0:00"}

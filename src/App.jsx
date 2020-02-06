@@ -31,6 +31,7 @@ function App({ playing, index, addPlaylist, addRef }) {
         src={playlist[index]}
         playing={playing}
         ref={ref => addRef(ref)}
+        volume={0.3}
       />
       {/* {console.log(audio)} */}
       {/* {console.log("seek: ", audio.seek())} */}

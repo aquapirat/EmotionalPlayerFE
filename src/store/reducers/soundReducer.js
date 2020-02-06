@@ -16,9 +16,19 @@ const soundReducer = (state = initialState, action) => {
     case "STOP":
       return { ...state, playing: false };
     case "NEXT":
-      return { ...state, index: 1 };
+      const nextIndex = state.index + 1;
+      if (nextIndex <= state.playlist.length - 1) {
+        return { ...state, index: nextIndex };
+      } else {
+        return { ...state, index: 0 };
+      }
     case "PREVIOUS":
-      return { ...state, index: 0 };
+      const previousIndex = state.index - 1;
+      if (previousIndex >= 0) {
+        return { ...state, index: previousIndex };
+      } else {
+        return { ...state, index: state.playlist.length - 1 };
+      }
     default:
       return state;
   }
