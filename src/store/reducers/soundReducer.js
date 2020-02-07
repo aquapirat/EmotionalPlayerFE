@@ -38,12 +38,14 @@ const soundReducer = (state = initialState, action) => {
         return state;
       }
     case "VOLUME_DOWN":
-      const lowerVolume = state.volume - 100;
+      const lowerVolume = state.volume - 10;
       if (lowerVolume >= 0) {
-        return { ...state, index: lowerVolume };
+        return { ...state, volume: lowerVolume };
       } else {
         return state;
       }
+    case "SET_SOUND":
+      return { ...state, index: action.index };
     default:
       return state;
   }

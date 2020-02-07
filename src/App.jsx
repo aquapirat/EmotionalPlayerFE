@@ -10,9 +10,12 @@ import { connect } from "react-redux";
 import sound2 from "./iseefire.mp3";
 import ReactHowler from "react-howler";
 import { addRef } from "./actions/addRef";
+import image6lack from "./mocks/albumImage.jpeg";
+import cover from "./cover2.jpg";
 
 const useStyles = makeStyles({
   application: {
+    background: "linear-gradient(45deg, #3333cc 30%, #9933ff 90%)",
     width: "100vw",
     display: "flex",
     alignItems: "center",
@@ -23,13 +26,25 @@ const useStyles = makeStyles({
 
 function App({ playing, index, addPlaylist, addRef, volume }) {
   const { application } = useStyles();
-  const playlist = [sound1, sound2];
+  const playlist = [
+    {
+      file: sound1,
+      author: "Anonymous",
+      title: "CreativeTitle",
+      image: image6lack
+    },
+    {
+      file: sound2,
+      author: "Ed Sheraan",
+      title: "I see fire",
+      image: cover
+    }
+  ];
   addPlaylist(playlist);
   return (
     <div className={application}>
-      {console.log(volume)}
       <ReactHowler
-        src={playlist[index]}
+        src={playlist[index].file}
         playing={playing}
         ref={ref => addRef(ref)}
         volume={volume / 100}

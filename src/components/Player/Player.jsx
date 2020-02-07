@@ -9,13 +9,10 @@ import Slider from "@material-ui/core/Slider";
 import VolumeDown from "@material-ui/icons/VolumeDown";
 import VolumeUp from "@material-ui/icons/VolumeUp";
 import { makeStyles } from "@material-ui/core/styles";
-
 import SkipPreviousIcon from "@material-ui/icons/SkipPrevious";
 import SkipNextIcon from "@material-ui/icons/SkipNext";
 import StopIcon from "@material-ui/icons/Stop";
 import PlayArrowIcon from "@material-ui/icons/PlayArrow";
-
-import imageMock from "../../mocks/albumImage.jpeg";
 import { play } from "../../actions/play";
 import { stopMusic } from "../../actions/stopMusic";
 import { next } from "../../actions/next";
@@ -56,7 +53,9 @@ const Player = ({
   referenceToFile,
   volumeUp,
   volumeDown,
-  volume
+  volume,
+  playlist,
+  index
 }) => {
   const {
     player,
@@ -92,8 +91,15 @@ const Player = ({
 
   return (
     <Card className={player}>
-      <CardHeader subheader="6Lack" title="Free" />
-      <CardMedia className={cover} image={imageMock} title="Paella dish" />
+      <CardHeader
+        subheader={playlist[index].author}
+        title={playlist[index].title}
+      />
+      <CardMedia
+        className={cover}
+        image={playlist[index].image}
+        title={playlist[index].title}
+      />
       <CardActions className={audioButtons} disableSpacing>
         <Grid container spacing={1}>
           <Grid item>
@@ -125,6 +131,7 @@ const Player = ({
           {/* {referenceToFile !== undefined
             ? referenceToFile.seek().toFixed(2)
             : "0:00"} */}
+          {/* seek function doesn`t work :(*/}
           0:00
         </span>
         <div className={timeSlider}>
