@@ -21,6 +21,9 @@
 # sound files
 *.mp3
 
+#covers jpg files
+*.jpg
+
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
