@@ -1,24 +1,24 @@
-import React from "react";
-import Card from "@material-ui/core/Card";
-import { makeStyles } from "@material-ui/core/styles";
-import PlaylistHeader from "./PlaylistHeader";
-import MusicItem from "./MusicItem";
-import { connect } from "react-redux";
+import React from 'react';
+import Card from '@material-ui/core/Card';
+import { makeStyles } from '@material-ui/core/styles';
+import { connect } from 'react-redux';
+import PlaylistHeader from './PlaylistHeader';
+import MusicItem from './MusicItem';
 
 const useStyles = makeStyles({
   root: {
-    width: "40vw",
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "space-between"
+    width: '40vw',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-between',
   },
   tab: {
-    minWidth: 0
+    minWidth: 0,
   },
   personsContainer: {
-    overflowY: "auto",
-    height: "60vh"
-  }
+    overflowY: 'auto',
+    height: '60vh',
+  },
 });
 
 const Playlist = ({ playlist, index }) => {
@@ -27,24 +27,16 @@ const Playlist = ({ playlist, index }) => {
   // } = useStyles();
   const { root, personsContainer } = useStyles();
 
-  const musicItems = playlist.map((item, iterator) =>
-    iterator === index ? (
-      <MusicItem
-        fileIndex={iterator}
-        active={true}
-        author={item.author}
-        image={item.image}
-        title={item.title}
-      />
-    ) : (
-      <MusicItem
-        fileIndex={iterator}
-        author={item.author}
-        image={item.image}
-        title={item.title}
-      />
-    )
-  );
+  const musicItems = playlist.map((item, iterator) => (
+    <MusicItem
+      active={iterator === index}
+      author={item.author}
+      fileIndex={iterator}
+      image={item.image}
+      key={item.title}
+      title={item.title}
+    />
+  ));
 
   return (
     <Card className={root}>
@@ -56,11 +48,9 @@ const Playlist = ({ playlist, index }) => {
   );
 };
 
-const mapStateToProps = state => {
-  return {
-    playlist: state.sound.playlist,
-    index: state.sound.index
-  };
-};
+const mapStateToProps = (state) => ({
+  playlist: state.sound.playlist,
+  index: state.sound.index,
+});
 
 export default connect(mapStateToProps)(Playlist);

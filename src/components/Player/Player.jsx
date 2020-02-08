@@ -1,47 +1,47 @@
-import React from "react";
-import Card from "@material-ui/core/Card";
-import CardHeader from "@material-ui/core/CardHeader";
-import CardMedia from "@material-ui/core/CardMedia";
-import CardActions from "@material-ui/core/CardActions";
-import IconButton from "@material-ui/core/IconButton";
-import Grid from "@material-ui/core/Grid";
-import Slider from "@material-ui/core/Slider";
-import VolumeDown from "@material-ui/icons/VolumeDown";
-import VolumeUp from "@material-ui/icons/VolumeUp";
-import { makeStyles } from "@material-ui/core/styles";
-import SkipPreviousIcon from "@material-ui/icons/SkipPrevious";
-import SkipNextIcon from "@material-ui/icons/SkipNext";
-import StopIcon from "@material-ui/icons/Stop";
-import PlayArrowIcon from "@material-ui/icons/PlayArrow";
-import { play } from "../../actions/play";
-import { stopMusic } from "../../actions/stopMusic";
-import { next } from "../../actions/next";
-import { previous } from "../../actions/previous";
-import { connect } from "react-redux";
-import { volumeUp } from "../../actions/volumeUp";
-import { volumeDown } from "../../actions/volumeDown";
+import React from 'react';
+import Card from '@material-ui/core/Card';
+import CardHeader from '@material-ui/core/CardHeader';
+import CardMedia from '@material-ui/core/CardMedia';
+import CardActions from '@material-ui/core/CardActions';
+import IconButton from '@material-ui/core/IconButton';
+import Grid from '@material-ui/core/Grid';
+import Slider from '@material-ui/core/Slider';
+import VolumeDown from '@material-ui/icons/VolumeDown';
+import VolumeUp from '@material-ui/icons/VolumeUp';
+import { makeStyles } from '@material-ui/core/styles';
+import SkipPreviousIcon from '@material-ui/icons/SkipPrevious';
+import SkipNextIcon from '@material-ui/icons/SkipNext';
+import StopIcon from '@material-ui/icons/Stop';
+import PlayArrowIcon from '@material-ui/icons/PlayArrow';
+import { connect } from 'react-redux';
+import { play } from '../../actions/play';
+import { stopMusic } from '../../actions/stopMusic';
+import { next } from '../../actions/next';
+import { previous } from '../../actions/previous';
+import { volumeUp } from '../../actions/volumeUp';
+import { volumeDown } from '../../actions/volumeDown';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   player: {
-    width: "30vw"
+    width: '30vw',
   },
   cover: {
-    height: "30vw",
-    width: "30vw"
+    height: '30vw',
+    width: '30vw',
   },
   audioButtons: {
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center"
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   timeSlider: {
-    width: "80%",
-    padding: theme.spacing(0, 4)
+    width: '80%',
+    padding: theme.spacing(0, 4),
   },
   timeSliderCotainer: {
-    display: "flex",
-    padding: 6
-  }
+    display: 'flex',
+    padding: 6,
+  },
 }));
 
 const Player = ({
@@ -55,14 +55,14 @@ const Player = ({
   volumeDown,
   volume,
   playlist,
-  index
+  index,
 }) => {
   const {
     player,
     cover,
     audioButtons,
     timeSlider,
-    timeSliderCotainer
+    timeSliderCotainer,
   } = useStyles();
 
   const handlePlay = () => {
@@ -92,13 +92,13 @@ const Player = ({
   return (
     <Card className={player}>
       <CardHeader
-        subheader={playlist[index].author}
-        title={playlist[index].title}
+        subheader={playlist[index] ? playlist[index].author : ''}
+        title={playlist[index] ? playlist[index].title : ''}
       />
       <CardMedia
         className={cover}
-        image={playlist[index].image}
-        title={playlist[index].title}
+        image={playlist[index] ? playlist[index].image : null}
+        title={playlist[index] ? playlist[index].title : null}
       />
       <CardActions className={audioButtons} disableSpacing>
         <Grid container spacing={1}>
@@ -116,11 +116,9 @@ const Player = ({
           <SkipPreviousIcon onClick={handlePrevious} />
         </IconButton>
         <IconButton>
-          {!playing ? (
-            <PlayArrowIcon onClick={handlePlay} />
-          ) : (
-            <StopIcon onClick={handleStop} />
-          )}
+          {!playing
+            ? <PlayArrowIcon onClick={handlePlay} />
+            : <StopIcon onClick={handleStop} />}
         </IconButton>
         <IconButton>
           <SkipNextIcon onClick={handleNext} />
@@ -131,7 +129,7 @@ const Player = ({
           {/* {referenceToFile !== undefined
             ? referenceToFile.seek().toFixed(2)
             : "0:00"} */}
-          {/* seek function doesn`t work :(*/}
+          {/* seek function doesn`t work :( */}
           0:00
         </span>
         <div className={timeSlider}>
@@ -140,32 +138,28 @@ const Player = ({
         <span>
           {referenceToFile !== undefined
             ? referenceToFile.duration().toFixed(2)
-            : "0:00"}
+            : '0:00'}
         </span>
       </div>
     </Card>
   );
 };
 
-const mapStateToProps = state => {
-  return {
-    playing: state.sound.playing,
-    playlist: state.sound.playlist,
-    index: state.sound.index,
-    referenceToFile: state.sound.referenceToFile,
-    volume: state.sound.volume
-  };
-};
+const mapStateToProps = (state) => ({
+  playing: state.sound.playing,
+  playlist: state.sound.playlist,
+  index: state.sound.index,
+  referenceToFile: state.sound.referenceToFile,
+  volume: state.sound.volume,
+});
 
-const mapDispatchToProps = dispatch => {
-  return {
-    play: () => dispatch(play()),
-    stopMusic: () => dispatch(stopMusic()),
-    next: () => dispatch(next()),
-    previous: () => dispatch(previous()),
-    volumeUp: () => dispatch(volumeUp()),
-    volumeDown: () => dispatch(volumeDown())
-  };
-};
+const mapDispatchToProps = (dispatch) => ({
+  play: () => dispatch(play()),
+  stopMusic: () => dispatch(stopMusic()),
+  next: () => dispatch(next()),
+  previous: () => dispatch(previous()),
+  volumeUp: () => dispatch(volumeUp()),
+  volumeDown: () => dispatch(volumeDown()),
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(Player);

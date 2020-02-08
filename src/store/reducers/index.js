@@ -1,11 +1,11 @@
-import { combineReducers } from "redux";
+import { combineReducers } from 'redux';
 
-import applicationReducer from "./applicationReducer";
-import soundReducer from "./soundReducer";
+import applicationReducer from './applicationReducer';
+import soundReducer from './soundReducer';
 
 const allReducers = combineReducers({
   application: applicationReducer,
-  sound: soundReducer
+  sound: soundReducer,
 });
 
 export default allReducers;
