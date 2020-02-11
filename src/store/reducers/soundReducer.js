@@ -8,11 +8,11 @@ const initialState = {
   lastCommand: '',
 };
 
-const DEBOUNCE_TIME = 1500;
+const DEBOUNCE_TIME = 1300;
 
 const soundReducer = (state = initialState, action) => {
   // CHECK STATMENT TO MAKE SURE THAT COMMAND WILL BE TRIGGERED ONLY ONCE
-  if (state.lastCommand === action.type && (new Date()).getTime() > state.lastChangedTime + DEBOUNCE_TIME) {
+  if (state.lastCommand === action.type && ((new Date()).getTime() < state.lastChangedTime + DEBOUNCE_TIME)) {
     return state;
   }
   switch (action.type) {
@@ -29,6 +29,7 @@ const soundReducer = (state = initialState, action) => {
         ...state, playing: false, lastChangedTime: (new Date()).getTime(), lastCommand: 'STOP',
       };
     case 'NEXT': {
+      console.log('[next] runiing');
       const nextIndex = state.index + 1;
       if (nextIndex <= state.playlist.length - 1) {
         return {
