@@ -8,7 +8,7 @@ const initialState = {
   lastCommand: '',
 };
 
-const DEBOUNCE_TIME = 1300;
+const DEBOUNCE_TIME = 600;
 
 const soundReducer = (state = initialState, action) => {
   // CHECK STATMENT TO MAKE SURE THAT COMMAND WILL BE TRIGGERED ONLY ONCE
