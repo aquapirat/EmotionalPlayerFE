@@ -1,12 +1,11 @@
 import React from 'react';
 import Card from '@material-ui/core/Card';
 import { makeStyles } from '@material-ui/core/styles';
-
+import { connect } from 'react-redux';
 import PlaylistHeader from './PlaylistHeader';
-import image6lack from '../../mocks/albumImage.jpeg';
 import MusicItem from './MusicItem';
 
-const useStyles = makeStyles(({
+const useStyles = makeStyles({
   root: {
     width: '40vw',
     display: 'flex',
@@ -20,74 +19,38 @@ const useStyles = makeStyles(({
     overflowY: 'auto',
     height: '60vh',
   },
-}));
+});
 
-const musicMock = [
-  {
-    author: '6lack',
-    title: 'Free',
-    image: image6lack,
-  },
-  {
-    author: '6lack',
-    title: 'Far away',
-    image: image6lack,
-  },
-  {
-    author: '6lack',
-    title: 'Love',
-    image: image6lack,
-  },
-  {
-    author: '6lack',
-    title: 'Free',
-    image: image6lack,
-  },
-  {
-    author: '6lack',
-    title: 'Free',
-    image: image6lack,
-  },
-  {
-    author: '6lack',
-    title: 'Free',
-    image: image6lack,
-  },
-  {
-    author: '6lack',
-    title: 'Free',
-    image: image6lack,
-  },
-  {
-    author: '6lack',
-    title: 'Free',
-    image: image6lack,
-  },
-  {
-    author: '6lack',
-    title: 'Free',
-    image: image6lack,
-  },
+const Playlist = ({ playlist, index }) => {
+  // const {
+  //   root, tab, personsContainer,
+  // } = useStyles();
+  const { root, personsContainer } = useStyles();
 
-];
-
-const Playlist = () => {
-  const {
-    root, tab, personsContainer,
-  } = useStyles();
-
-  const musicItems = musicMock.map((item) => <MusicItem author={item.author} image={item.image} title={item.title} />);
+  const musicItems = playlist.map((item, iterator) => (
+    <MusicItem
+      active={iterator === index}
+      author={item.author}
+      fileIndex={iterator}
+      image={item.image}
+      key={item.title}
+      title={item.title}
+    />
+  ));
 
   return (
     <Card className={root}>
       <div>
         <PlaylistHeader />
-        <div className={personsContainer}>
-          {musicItems}
-        </div>
+        <div className={personsContainer}>{musicItems}</div>
       </div>
     </Card>
   );
 };
 
-export default Playlist;
+const mapStateToProps = (state) => ({
+  playlist: state.sound.playlist,
+  index: state.sound.index,
+});
+
+export default connect(mapStateToProps)(Playlist);

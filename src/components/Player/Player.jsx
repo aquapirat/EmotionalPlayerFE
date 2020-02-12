@@ -9,12 +9,17 @@ import Slider from '@material-ui/core/Slider';
 import VolumeDown from '@material-ui/icons/VolumeDown';
 import VolumeUp from '@material-ui/icons/VolumeUp';
 import { makeStyles } from '@material-ui/core/styles';
-
 import SkipPreviousIcon from '@material-ui/icons/SkipPrevious';
 import SkipNextIcon from '@material-ui/icons/SkipNext';
+import StopIcon from '@material-ui/icons/Stop';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
-
-import imageMock from '../../mocks/albumImage.jpeg';
+import { connect } from 'react-redux';
+import { play } from '../../actions/play';
+import { stopMusic } from '../../actions/stopMusic';
+import { next } from '../../actions/next';
+import { previous } from '../../actions/previous';
+import { volumeUp } from '../../actions/volumeUp';
+import { volumeDown } from '../../actions/volumeDown';
 
 const useStyles = makeStyles((theme) => ({
   player: {
@@ -39,53 +44,122 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Player = () => {
+const Player = ({
+  play,
+  stopMusic,
+  next,
+  previous,
+  playing,
+  referenceToFile,
+  volumeUp,
+  volumeDown,
+  volume,
+  playlist,
+  index,
+}) => {
   const {
-    player, cover, audioButtons, timeSlider, timeSliderCotainer,
+    player,
+    cover,
+    audioButtons,
+    timeSlider,
+    timeSliderCotainer,
   } = useStyles();
+
+  const handlePlay = () => {
+    play();
+  };
+
+  const handleStop = () => {
+    stopMusic();
+  };
+
+  const handleNext = () => {
+    next();
+  };
+
+  const handlePrevious = () => {
+    previous();
+  };
+
+  const handleVolumeDown = () => {
+    volumeDown();
+  };
+
+  const handleVolumeUp = () => {
+    volumeUp();
+  };
 
   return (
     <Card className={player}>
       <CardHeader
-        subheader="6Lack"
-        title="Free"
+        subheader={playlist[index] ? playlist[index].author : ''}
+        title={playlist[index] ? playlist[index].title : ''}
       />
       <CardMedia
         className={cover}
-        image={imageMock}
-        title="Paella dish"
+        image={playlist[index] ? playlist[index].image : null}
+        title={playlist[index] ? playlist[index].title : null}
       />
       <CardActions className={audioButtons} disableSpacing>
         <Grid container spacing={1}>
           <Grid item>
-            <VolumeDown />
+            <VolumeDown onClick={handleVolumeDown} />
           </Grid>
           <Grid item xs>
-            <Slider onChange={null} value={null} />
+            <Slider onChange={null} value={volume} />
           </Grid>
           <Grid item>
-            <VolumeUp />
+            <VolumeUp onClick={handleVolumeUp} />
           </Grid>
         </Grid>
         <IconButton>
-          <SkipPreviousIcon />
+          <SkipPreviousIcon onClick={handlePrevious} />
         </IconButton>
         <IconButton>
-          <PlayArrowIcon />
+          {!playing
+            ? <PlayArrowIcon onClick={handlePlay} />
+            : <StopIcon onClick={handleStop} />}
         </IconButton>
         <IconButton>
-          <SkipNextIcon />
+          <SkipNextIcon onClick={handleNext} />
         </IconButton>
       </CardActions>
       <div className={timeSliderCotainer}>
-        <span>0:00</span>
+        <span>
+          {/* {referenceToFile !== undefined
+            ? referenceToFile.seek().toFixed(2)
+            : "0:00"} */}
+          {/* seek function doesn`t work :( */}
+          0:00
+        </span>
         <div className={timeSlider}>
           <Slider />
         </div>
-        <span>3:10</span>
+        <span>
+          {referenceToFile !== undefined
+            ? referenceToFile.duration().toFixed(2)
+            : '0:00'}
+        </span>
       </div>
     </Card>
   );
 };
 
-export default Player;
+const mapStateToProps = (state) => ({
+  playing: state.sound.playing,
+  playlist: state.sound.playlist,
+  index: state.sound.index,
+  referenceToFile: state.sound.referenceToFile,
+  volume: state.sound.volume,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  play: () => dispatch(play()),
+  stopMusic: () => dispatch(stopMusic()),
+  next: () => dispatch(next()),
+  previous: () => dispatch(previous()),
+  volumeUp: () => dispatch(volumeUp()),
+  volumeDown: () => dispatch(volumeDown()),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Player);

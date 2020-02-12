@@ -19,7 +19,10 @@
 .env.production.local
 
 # sound files
-.mp3
+*.mp3
+
+#covers jpg files
+*.jpg
 
 npm-debug.log*
 yarn-debug.log*
